@@ -1,0 +1,34 @@
+{% extends "dashboard_base.html" %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="card shadow-lg p-4" style="width: 400px; border-radius: 10px;">
+    <h2 style="text-align: center; margin-bottom: 1rem;" <span class="text-danger"> Create </span> <span style="color:darkgreen">a New Group</span> </h2>
+        <form method="post" style="display: flex; flex-direction: column;">
+            {% csrf_token %}
+            
+            <!-- Group Name -->
+            <label for="id_name" style="font-weight: bold; margin-bottom: 5px;">Group Name</label>
+            <input type="text" id="id_name" name="name" placeholder="Enter Group Name" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 1rem;" required>
+            
+            <!-- Budget Limit -->
+            <label for="id_budget_limit" style="font-weight: bold; margin-bottom: 5px;">Budget Limit</label>
+            <input type="number" id="id_budget_limit" name="budget_limit" placeholder="Enter Budget Limit" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 1rem;" required>
+            
+            <!-- Group Members Limit -->
+            <label for="id_group_members_limit" style="font-weight: bold; margin-bottom: 5px;">Group Members Limit</label>
+            <input type="number" id="id_group_members_limit" name="group_members_limit" placeholder="Enter Members Limit" style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 1rem;" required>
+            
+            <!-- Group Code (readonly) -->
+            <label for="id_join_code" style="font-weight: bold; margin-bottom: 5px;">Group Code</label>
+            <!-- Using the form field instead of manually setting the value -->
+            <input type="text" id="id_join_code" name="join_code" value="{{ form.join_code.value }}" readonly style="padding: 10px; border: 1px solid #ccc; background-color: #f9f9f9; border-radius: 5px; margin-bottom: 1.5rem;">
+
+            <!-- Submit Button -->
+            <button type="submit" style="background-color: #e53935; color: white; padding: 10px; border: none; border-radius: 5px; font-size: 16px; cursor: pointer;">
+                Create Group 
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock content %}

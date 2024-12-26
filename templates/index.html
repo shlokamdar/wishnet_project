@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} WishNet | Home{% endblock title %}
+
+{% block content %}
+<!-- Hero Section -->
+<video autoplay muted loop class="background-video">
+  <source src="{% static 'media/hero.mp4' %}" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+<section class="hero-section">
+  <div class="hero-content">
+    <h1>Welcome to <span id="wish">Wish</span><span id="craft">Net</span></h1>
+    <h5>from Wishlist to Gift List, Without the Drama</h5>
+    <a href="{% url 'accounts:login' %}" class="btn btn-danger text-white rounded-pill mx-2">Get Started</a>
+  </div>
+</section>
+
+<!-- About Section -->
+<section class="about-section py-5" data-aos="fade-up">
+  <div class="container">
+    <h2 class="text-center mb-4">What is WishNet?</h2>
+    <p class="text-center lead">WishNet is a complete gifting solution designed to help you create, share, and manage wishlists with ease. Whether it’s for birthdays, holidays, or any special occasion, we make gift-giving simple, fun, and thoughtful!</p>
+    
+    <div class="row mt-5">
+      <!-- Card 1: Personalized Wishlists -->
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm" data-aos="fade-up">
+          <div class="card-body">
+            <i class="fa fa-gift fa-3x text-danger mb-3"></i>
+            <h4 class="card-title">Create Personalized Wishlists</h4>
+            <p class="card-text">Build categorized wishlists for any occasion, from tangible items like books and gadgets to intangible experiences like spa days or donations. Easily organize everything to suit your preferences.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Secret Santa Feature -->
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm" data-aos="fade-up" data-aos-delay="200">
+          <div class="card-body">
+            <i class="fa fa-users fa-3x text-danger mb-3"></i>
+            <h4 class="card-title">Secret Santa Feature</h4>
+            <p class="card-text">Join groups for fun Secret Santa exchanges. Set your preferences to make sure you receive something you'll love, and enjoy the thrill of surprise while staying within your budget!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Budget Management -->
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm" data-aos="fade-up" data-aos-delay="400">
+          <div class="card-body">
+            <i class="fa fa-credit-card fa-3x text-danger mb-3"></i>
+            <h4 class="card-title">Budget-Friendly Gifting</h4>
+            <p class="card-text">Set a budget for your wishlists and ensure that your friends stay within the limit when choosing gifts. No more worrying about expensive gifts or overspending.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <!-- Card 4: Progress Tracking -->
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm" data-aos="fade-up" data-aos-delay="600">
+          <div class="card-body">
+            <i class="fa fa-check-circle fa-3x text-danger mb-3"></i>
+            <h4 class="card-title">Track Your Progress</h4>
+            <p class="card-text">Keep an eye on the status of your wishlist. See who has bought items, track your budget, and avoid duplicate gifts—all in real-time!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5: Gift Ideas for Everyone -->
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm" data-aos="fade-up" data-aos-delay="800">
+          <div class="card-body">
+            <i class="fa fa-lightbulb fa-3x text-danger mb-3"></i>
+            <h4 class="card-title">Gift Ideas for Everyone</h4>
+            <p class="card-text">Looking for the perfect gift? Browse endless categories and personalize your wishlist to fit any interest, from tech gadgets to unique experiences!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6: Share with Loved Ones -->
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm" data-aos="fade-up" data-aos-delay="1000">
+          <div class="card-body">
+            <i class="fa fa-share-alt fa-3x text-danger mb-3"></i>
+            <h4 class="card-title">Share with Loved Ones</h4>
+            <p class="card-text">Easily share your wishlists with friends and family. Let them know exactly what you'd love to receive, and avoid duplicates or miscommunication when it comes to gifting.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="mt-4 text-center">WishNet makes it easy to create, manage, and share your wishlists, making gift-giving more organized, fun, and thoughtful. Join us today and start crafting your perfect wishlist!</p>
+  </div>
+</section>
+
+
+
+
+<!-- Call to Action Section -->
+<section class="cta-section py-5" data-aos="fade-up">
+  <div class="container text-center">
+    <h3>Ready to start crafting your perfect wishlists?</h3>
+    <p>Join WishNet today and make every gift special!</p>
+    <a href="{% url 'accounts:register' %}" class="btn btn-danger text-white rounded-pill mx-2">Register</a>
+  </div>
+</section>
+
+<script>
+  // Initialize AOS
+  AOS.init();
+</script>
+
+{% endblock content %}

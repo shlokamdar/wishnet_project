@@ -1,0 +1,143 @@
+{% extends "dashboard_base.html" %}
+
+{% load static %}
+
+{% block title %}
+  {{ user.username }} | Profile
+{% endblock title %}
+
+{% block navbar %}
+<!-- Off-canvas Navbar for small screens -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <!-- Navbar Logo -->
+        <a class="navbar-brand" href="{% url 'index' %}">
+            <img src="{% static 'media/navbar.svg' %}" alt="Logo" class="img-fluid" style="max-width: 200px;">
+        </a>
+
+        <!-- Toggle Button for Off-Canvas Navbar -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Off-canvas Menu -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">WishNet</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'accounts:logout' %}" class="btn btn-danger rounded-pill mx-2">Logout</a>
+                    {% else %}
+                    <a href="{% url 'accounts:login' %}" class="btn btn-white text-danger border border-danger rounded-pill mx-2">Login</a>
+                    <a href="{% url 'accounts:register' %}" class="btn btn-danger text-white rounded-pill mx-2">Register</a>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+{% endblock navbar %}
+
+{% block content %}
+<div class="container my-4" style="max-width: 800px;">
+    <h2 class="text-center mb-4">
+        {% if user == request.user %}
+            Your Profile
+        {% else %}
+            Viewing {{ user.username }}'s Profile
+        {% endif %}
+    </h2>
+
+    <!-- Display messages -->
+    {% if messages %}
+        <div class="alert alert-info">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="card shadow">
+        <div class="card-header bg-danger text-white text-center">
+            <h5>
+                {% if user == request.user %}
+                    Your Details
+                {% else %}
+                    User Details
+                {% endif %}
+            </h5>
+        </div>
+        <div class="card-body">
+            <!-- Profile Picture -->
+            {% if user.profile_picture %}
+                <div class="text-center mb-3">
+                    <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}'s Profile Picture" 
+                         class="img-fluid rounded-circle" 
+                         style="max-width: 150px; border: 5px solid #f8f9fa;">
+                </div>
+            {% else %}
+                <div class="text-center mb-3">
+                    <img src="{% static 'media/default.jpg' %}" alt="Default Profile Picture" 
+                         class="img-fluid rounded-circle" 
+                         style="max-width: 150px; border: 5px solid #f8f9fa;">
+                </div>
+            {% endif %}
+
+            <!-- User Details -->
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Pseudoname:</strong> {{ user.pseudoname|default:"Not provided" }}</p>
+            <p><strong>Bio:</strong> {{ user.bio|default:"No bio provided" }}</p>
+            <p><strong>Address:</strong> {{ user.address|default:"Not provided" }}</p>
+            <p><strong>Date of Birth:</strong> {{ user.date_of_birth|date:"F j, Y"|default:"Not provided" }}</p>
+            <p><strong>Joined On:</strong> {{ user.date_joined|date:"F j, Y" }}</p>
+
+
+            <!-- My Wishlists Button -->
+            
+                <a href="{% url 'wishlists:wishlist_list' user_id=user.id %}" class="btn btn-danger rounded-pill mb-2">
+                    {% if user == request.user %}
+                        View My Wishlists
+                    {% else %}
+                        View {{ user.username }}'s Wishlists
+                    {% endif %}
+                </a>
+        
+
+            {% if user != request.user %}
+                <!-- Friend's Profile Actions -->
+                <div class="text-center">
+                    {% if user in request.user.friends.all %}
+                        <form method="POST" action="{% url 'friendship:remove_friend' user.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger rounded-pill mb-2">
+                                Remove Friend
+                            </button>
+                        </form>
+                    {% else %}
+                        <form method="POST" action="{% url 'friendship:send_friend_request' user.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger rounded-pill mb-2">
+                                Send Friend Request
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% else %}
+                <!-- Logged-in User's Actions -->
+                <div class="text-center">
+                    <a href="{% url 'accounts:edit_profile' %}" class="btn btn-danger rounded-pill mb-2">
+                        Edit Profile
+                    </a>
+                    <a href="#" class="btn btn-light rounded-pill mb-2">
+                        Change Password
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

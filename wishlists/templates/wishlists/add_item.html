@@ -1,0 +1,19 @@
+{% extends 'dashboard_base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card- shadow-lg p-4">
+        <h2 class="text-center mb-4">Add <span class="text-danger">Item</span></h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success rounded-pill w-50 mx-auto d-block">Add Item</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+
+{% endblock script %}

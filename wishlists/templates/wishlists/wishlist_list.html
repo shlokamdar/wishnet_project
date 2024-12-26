@@ -1,0 +1,116 @@
+{% extends 'dashboard_base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="py-4 px-3">
+        <h3 class="mb-4 text-center text-black">
+            {% if is_own_wishlists %}
+                🎄 Your Wishlists 🎁
+            {% else %}
+                🎄 {{ user.username }}'s Wishlists 🎁
+            {% endif %}
+        </h3>
+    </div> 
+
+    <div class="row mt-4">
+        {% for wishlist in wishlists %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                <div class="card shadow" style="border-radius: 15px; transition: transform 0.2s, box-shadow 0.2s;">
+                    <div class="card-body position-relative" 
+                         style="background: linear-gradient(to bottom, rgb(252, 252, 252), #fff); 
+                                border-radius: 15px;">
+                        <!-- Wishlist Title -->
+                        <h5 class="card-title text-center text-danger">{{ wishlist.title }}</h5>
+
+                        <!-- Category Badge with Name -->
+                        {% if wishlist.category %}
+                            <span class="badge" 
+                                  style="background-color: {{ wishlist.get_color_code }}; 
+                                         color: white; 
+                                         padding: 5px 10px; 
+                                         border-radius: 20px; 
+                                         font-size: 14px;">
+                                        {{ wishlist.category }}
+                            </span>
+                        {% endif %}
+
+                        <!-- Wishlist Details -->
+                        <p class="card-text text-muted">
+                            <strong>Created On:</strong> {{ wishlist.created_at|date:"F j, Y" }}<br>
+                            <strong>Items:</strong> {{ wishlist.items.count }}<br>
+                            <strong>Description:</strong> {{ wishlist.description|default:"No description provided" }}
+                        </p>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-between mt-3">
+                            <a href="{% url 'wishlists:wishlist_detail' wishlist.pk %}" 
+                               class="btn btn-danger rounded-pill" 
+                               style="box-shadow: 0px 0px">
+                                View Wishlist
+                            </a>
+                            {% if is_own_wishlists %}
+                            <a href="{% url 'wishlists:edit_wishlist' pk=wishlist.id %}"
+                               class="btn btn-light rounded-pill" 
+                               style="box-shadow: 0px 0px">
+                                    Edit
+                                </a>
+                            {% endif %}
+                        </div>
+
+                        {% if wishlist.visibility == 'private' and not is_own_wishlists %}
+                            <div class="alert alert-warning mt-3">
+                                This wishlist is private and can only be viewed by the owner.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-center text-muted">
+                {% if is_own_wishlists %}
+                    You have no wishlists yet. Create one now! 🎄
+                {% else %}
+                    {{ user.username }} has no wishlists yet. 🎄
+                {% endif %}
+            </p>
+        {% endfor %}
+    </div>
+
+    {% if is_own_wishlists %}
+        <div class="text-center mt-4">
+            <a href="{% url 'wishlists:create_wishlist' %}" 
+               class="btn btn-success rounded-pill {% if wishlists|length == 0 %}glow-button{% endif %}"
+               style="box-shadow: 0px 0px 8px rgba(0, 255, 0, 0.5);">
+                Create New Wishlist
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Add hover effects and glowing animation -->
+<style>
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Ensure the buttons inside cards are responsive */
+    .btn {
+        white-space: nowrap;
+    }
+
+    /* Glowing effect for the button */
+    .glow-button {
+        animation: glow 1.5s infinite;
+        box-shadow: 0 0 15px rgba(0, 255, 0, 0.7);
+    }
+
+    /* Animation for glowing effect */
+    @keyframes glow {
+        0% { box-shadow: 0 0 10px rgba(0, 255, 0, 0.5); }
+        50% { box-shadow: 0 0 20px rgba(0, 255, 0, 1); }
+        100% { box-shadow: 0 0 10px rgba(0, 255, 0, 0.5); }
+    }
+</style>
+
+{% endblock %}

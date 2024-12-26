@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} WishNet | Register {% endblock title %}
+
+{% block content %}
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="card shadow-lg p-4" style="width: 100%; max-width: 600px; border-radius: 10px;">
+            <!-- Registration Form Title -->
+            <h2 class="text-center mb-4">Create an Account at <span class="text-danger">WishNet</span></h2>
+
+            <!-- Registration Form -->
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- Display non-field errors -->
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <ul>
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                
+                <!-- Display errors for individual fields -->
+                {% for field in form %}
+                    {% if field.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ field.label }}:</strong>
+                        <ul>
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+
+                <!-- Username Input -->
+                <div class="form-group mb-3">
+                    <label for="username">Username <span class="text-danger">*</span></label>
+                    <input type="text" name="username" class="form-control rounded-pill" placeholder="Enter Username" required>
+                </div>
+
+                <!-- Pseudoname Input -->
+                <div class="form-group mb-3">
+                    <label for="pseudoname">Pseudoname</label>
+                    <input type="text" name="pseudoname" class="form-control rounded-pill" placeholder="Enter a pseudoname">
+                </div>
+
+                <!-- Email Input -->
+                <div class="form-group mb-3">
+                    <label for="email">Email Address <span class="text-danger">*</span></label>
+                    <input type="email" name="email" class="form-control rounded-pill" placeholder="Enter Email" required>
+                </div>
+
+                <!-- Password Input -->
+                <div class="form-group mb-3">
+                    <label for="password1">Password <span class="text-danger">*</span></label>
+                    <div class="input-group position-relative">
+                        <input type="password" name="password1" id="password1" class="form-control rounded-pill" placeholder="Enter Password" required>
+                        <span id="toggle-password1" class="input-group-text position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Confirm Password Input -->
+                <div class="form-group mb-3">
+                    <label for="password2">Confirm Password <span class="text-danger">*</span></label>
+                    <div class="input-group position-relative">
+                        <input type="password" name="password2" id="password2" class="form-control rounded-pill" placeholder="Confirm Password" required>
+                        <span id="toggle-password2" class="input-group-text position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Profile Picture Input -->
+                <div class="form-group mb-3">
+                    <label for="profile_picture">Add Photo</label>
+                    <input type="file" name="profile_picture" class="form-control rounded-pill" accept="image/*">
+                </div>
+
+                <!-- Address Input -->
+                <div class="form-group mb-3">
+                    <label for="address">Add Address</label>
+                    <input type="text" name="address" class="form-control rounded-pill" placeholder="Enter Address">
+                </div>
+
+                <!-- Register Button -->
+                <button type="submit" class="btn btn-danger rounded-pill w-100">Register</button>
+
+                <!-- Redirect to Login page -->
+                <div class="text-center mt-2">
+                    <p>Already have an account? <a href="{% url 'accounts:login' %}" style="color:black;">Login here</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Get the password input fields and eye icons
+        const passwordField1 = document.getElementById('password1');
+        const passwordField2 = document.getElementById('password2');
+        const toggleButton1 = document.getElementById('toggle-password1');
+        const toggleButton2 = document.getElementById('toggle-password2');
+    
+        // Toggle visibility for the first password field
+        toggleButton1.addEventListener('click', function() {
+            if (passwordField1.type === 'password') {
+                passwordField1.type = 'text';
+                toggleButton1.innerHTML = '<i class="fas fa-eye-slash"></i>';  // Change to 'eye-slash'
+            } else {
+                passwordField1.type = 'password';
+                toggleButton1.innerHTML = '<i class="fas fa-eye"></i>';  // Change to 'eye'
+            }
+        });
+    
+        // Toggle visibility for the second password field
+        toggleButton2.addEventListener('click', function() {
+            if (passwordField2.type === 'password') {
+                passwordField2.type = 'text';
+                toggleButton2.innerHTML = '<i class="fas fa-eye-slash"></i>';  // Change to 'eye-slash'
+            } else {
+                passwordField2.type = 'password';
+                toggleButton2.innerHTML = '<i class="fas fa-eye"></i>';  // Change to 'eye'
+            }
+        });
+    </script>
+{% endblock content %}

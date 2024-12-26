@@ -1,0 +1,17 @@
+{% extends 'dashboard_base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-center mb-4">Delete <span class="text-danger">Item</span></h2>
+
+        <p>Are you sure you want to delete the item <strong>{{ item.name }}</strong>?</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Delete Item</button>
+            <a href="{% url 'wishlist_detail' pk=item.wishlist.id %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock content %}

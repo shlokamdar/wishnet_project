@@ -1,0 +1,111 @@
+{% extends "dashboard_base.html" %}
+{% load static %}
+
+{% block title %}Home {% endblock title %}
+
+{% block content %}
+    <!-- Main Content -->
+    <div class="container-fluid mt-5">
+        <div class="row">
+            <!-- Left Section: Friend Wishlists -->
+            <div class="col-12 col-md-8 mb-4 shadow-sm p-3 mb-5 bg-white rounded">
+                <h3 class="m-2">Friend Wishlists</h3>
+                {% if wishlists|length == 0 %}
+                    <div class="empty-state d-flex flex-column align-items-center text-center">
+                        <img src="{% static 'media/imp-1069_256.gif' %}" alt="No Wishlists" class="mb-3">
+                        <p>No friends here yet! Start adding your friends.</p>
+                        <a href="{% url 'friendship:search_user' %}" class="btn btn-danger mt-3">Add a Friend</a>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        {% for wishlist in wishlists %}
+                            {% if wishlist.visibility == 'public' or wishlist.user == request.user %}
+                                <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4">
+                                    <a href="{% url 'wishlists:wishlist_detail' wishlist.id %}" class="text-decoration-none">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center mb-2">
+                                                    <div class="ms-3">
+                                                        <h5 class="card-title">{{ wishlist.user.username }}</h5>
+                                                    </div>
+                                                </div>
+                                                <p class="card-text">{{ wishlist.description|truncatewords:6 }}</p>
+                                                {% if wishlist.category %}
+                                                    <span class="badge" style="background-color: {{ wishlist.get_color_code }}">
+                                                        {{ wishlist.category|capfirst }}
+                                                    </span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">No Category</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Right Section: Groups and Friends -->
+            <div class="col-12 col-md-4 shadow-sm p-3 mb-5 bg-white rounded">
+                <div class="mb-4">
+                    <h4 id="my_groups">My Groups</h4>
+                    <ul class="list-group">
+                        {% for group in user_groups %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <strong>{{ group.name }}</strong>
+                                <a href="{% url 'groups:group_detail' group.id %}" class="btn btn-light btn-sm">View</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="mt-3 d-flex flex-column flex-sm-row">
+                        <a href="{% url 'groups:join_group' %}" class="btn btn-danger me-2 mb-2 mb-sm-0">Join a Group</a>
+                        <a href="{% url 'groups:create_group' %}" class="btn btn-secondary">Create a Group</a>
+                    </div>
+                </div>
+
+                <!-- Friends Section -->
+                <div>
+                    <h4 id="my_friends">My Friends</h4>
+                    {% if friends|length == 0 %}
+                        <div class="empty-state d-flex flex-column align-items-center text-center">
+                            <p>You don't have any friends yet. Add some to see their wishlists!</p>
+                            <a href="{% url 'friendship:search_user' %}" class="btn btn-danger mt-3">Add a Friend</a>
+                        </div>
+                    {% else %}
+                        <ul class="list-group">
+                            {% for friend in friends %}
+                                <li class="list-group-item">
+                                    <a href="{% url 'accounts:view_profile' user_id=friend.id %}" class="text-decoration-none text-black">{{ friend.username }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+
+                <!-- Pending Friend Requests -->
+                <div>
+                    <h4 class="mt-2">Pending Friend Requests</h4>
+                    {% if pending_requests %}
+                        <ul class="list-group">
+                            {% for request in pending_requests %}
+                                <li class="list-group-item">
+                                    {% if request.from_user == request.user %}
+                                        Sent to {{ request.to_user.username }}
+                                    {% else %}
+                                        Sent by {{ request.from_user.username }}
+                                    {% endif %}
+                                    <span class="badge bg-warning ms-2">{{ request.status }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No pending requests.</p>
+                    {% endif %}
+                    <a href="{% url 'friendship:view_friend_requests' %}" class="btn btn-danger mt-3">View All Requests</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

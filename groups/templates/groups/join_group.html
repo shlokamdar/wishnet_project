@@ -1,0 +1,41 @@
+{% extends "dashboard_base.html" %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <!-- Make the card wider by increasing the width -->
+  <div class="card shadow-sm p-4" style="width: 450px; border-radius: 12px;">
+    <h3 class="text-center mb-4" style="font-weight: 600; color: #333;">Join a Group</h3>
+
+    <!-- Display messages -->
+    {% if messages %}
+      <div class="mb-3">
+        {% for message in messages %}
+          <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'warning' %}alert-warning{% elif message.tags == 'success' %}alert-success{% else %}alert-info{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- Group joining form -->
+    <form method="post" class="d-grid gap-3">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="group_code" class="form-label" style="font-weight: 500;">Enter Group Code:</label>
+        <input type="text" name="group_code" id="group_code" class="form-control" placeholder="Group Code" required>
+      </div>
+
+      <!-- Pseudonym field -->
+      <div class="form-group">
+        <label for="pseudonym" class="form-label" style="font-weight: 500;">Enter Your Pseudonym:</label>
+        <input type="text" name="pseudonym" id="pseudonym" class="form-control" 
+               placeholder="Enter pseudonym (optional)" value="{{ request.user.profile.pseudonym }}" >
+      </div>
+
+      <button type="submit" class="btn btn-danger w-100" style="border-radius: 8px; font-weight: 500;">
+        Join Group
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock content %}

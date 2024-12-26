@@ -1,0 +1,166 @@
+{% extends 'dashboard_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-center mb-7" style="font-size:40px">Edit <span class="text-danger">Wishlist</span></h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="row mb-3">
+                <!-- Title Field -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_title" class="form-label">Title</label>
+                        <input type="text" name="title" class="form-control rounded-pill" id="id_title" value="{{ wishlist_form.title.value|default:'' }}" placeholder="Enter Wishlist Title" required>
+                        {% for error in wishlist_form.title.errors %}
+                            <div class="alert alert-danger mt-2">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Visibility Field -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_visibility" class="form-label">Visibility</label>
+                        <select name="visibility" class="form-control rounded-pill" id="id_visibility">
+                            <option value="public" {% if wishlist_form.visibility.value == 'public' %}selected{% endif %}>Public</option>
+                            <option value="private" {% if wishlist_form.visibility.value == 'private' %}selected{% endif %}>Private</option>
+                        </select>
+                        {% for error in wishlist_form.visibility.errors %}
+                            <div class="alert alert-danger mt-2">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <!-- Description Field -->
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="id_description" class="form-label">Description</label>
+                        <textarea name="description" class="form-control rounded-pill" id="id_description" placeholder="Enter Wishlist Description" rows="3">{{ wishlist_form.description.value|default:'' }}</textarea>
+                        {% for error in wishlist_form.description.errors %}
+                            <div class="alert alert-danger mt-2">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <!-- Group Field -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_group" class="form-label">Group</label>
+                        <select name="group" class="form-control rounded-pill" id="id_group">
+                            <option value="" selected>Select a Group</option>
+                            {% if groups %}
+                                {% for group in groups %}
+                                    <option value="{{ group.id }}" {% if wishlist_form.group.value == group.id %}selected{% endif %}>
+                                        {{ group.name }}
+                                    </option>
+                                {% endfor %}
+                            {% else %}
+                                <option disabled>No groups available</option>
+                            {% endif %}
+                        </select>
+                        {% for error in wishlist_form.group.errors %}
+                            <div class="alert alert-danger mt-2">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Item Name Field -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_item_name" class="form-label">Item Name</label>
+                        <input type="text" name="name" class="form-control rounded-pill" id="id_item_name" placeholder="Enter Item Name" value="{{ item_form.name.value|default:'' }}">
+                        {% for error in item_form.name.errors %}
+                            <div class="alert alert-danger mt-2">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <!-- Category Field -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_category" class="form-label">Category</label>
+                        <select name="category" class="form-control rounded-pill" id="id_category">
+                            {% for value, label in wishlist_form.fields.category.choices %}
+                                <option value="{{ value }}" {% if wishlist_form.category.value == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        {% for error in wishlist_form.category.errors %}
+                            <div class="alert alert-danger mt-2">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Item Description Field -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_item_description" class="form-label">Item Description</label>
+                        <textarea name="item_description" class="form-control rounded-pill" id="id_item_description" placeholder="Enter Item Description" rows="3">{{ item_form.description.value|default:'' }}</textarea>
+                        {% for error in item_form.description.errors %}
+                            <div class="alert alert-danger mt-2">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <!-- Price Range Field -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_item_price_range" class="form-label">Price Range</label>
+                        <select name="price_range" id="id_item_price_range" class="form-control rounded-pill">
+                            {% for value, label in item_form.fields.price_range.choices %}
+                                <option value="{{ value }}" {% if item_form.price_range.value == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        {% for error in item_form.price_range.errors %}
+                            <div class="alert alert-danger mt-2">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Item URL Field -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_item_url" class="form-label">Item URL</label>
+                        <input type="url" name="url" class="form-control rounded-pill" id="id_item_url" placeholder="Enter Item URL" value="{{ item_form.url.value|default:'' }}">
+                        {% for error in item_form.url.errors %}
+                            <div class="alert alert-danger mt-2">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <!-- Item Image Field -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="id_item_image" class="form-label">Item Image</label>
+                        <input type="file" name="item_image" class="form-control rounded-pill" id="id_item_image">
+                        {% for error in item_form.image.errors %}
+                            <div class="alert alert-danger mt-2">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-danger rounded-pill w-50 w-50 mx-auto d-block">Update Wishlist</button>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

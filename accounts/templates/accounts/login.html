@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} WishNet | Login {% endblock title %}
+
+{% block content %}
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="card shadow-lg p-4" style="width: 100%; max-width: 400px; border-radius: 10px;">
+            <!-- Welcome back message -->
+            <h2 class="text-center mb-4">Welcome Back to <span class="text-danger">WishNet</span></h2>
+            
+            <!-- Inline "Create one!" link -->
+            <p class="text-center">Don't have an account? <a href='{% url 'accounts:register' %}' class="d-inline">Create one!</a></p>
+            
+            <!-- Login Form -->
+            <form method="POST">
+                {% csrf_token %}
+                
+                <!-- Display non-field errors -->
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <ul>
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                
+                <!-- Loop through form fields and display errors -->
+                {% for field in form %}
+                    {% if field.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ field.label }}:</strong>
+                            <ul>
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                <!-- Username Input -->
+                <div class="form-group mb-3">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" class="form-control rounded-pill" placeholder="Enter Username" required>
+                </div>
+
+                <!-- Password Input -->
+                <div class="form-group mb-3">
+                    <label for="password">Password</label>
+                    <div class="input-group">
+                        <input type="password" name="password" id="password" class="form-control rounded-pill" placeholder="Enter Password" required>
+                        <span id="toggle-password" class="input-group-text">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Login Button -->
+                <button type="submit" class="btn btn-danger rounded-pill w-100">Login</button>
+                
+                <!-- Forgot Password Link -->
+                <div class="text-center mt-2">
+                    <a href="forgot_password" style="color:black;">Forgot Password?</a>
+                </div>
+            </form>
+        </div> 
+    </div>
+
+    <script>
+        // Get the password input field and the eye icon
+        const passwordField = document.getElementById('password');
+        const toggleButton = document.getElementById('toggle-password');
+    
+        // Toggle visibility of the password field
+        toggleButton.addEventListener('click', function() {
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleButton.innerHTML = '<i class="fas fa-eye-slash"></i>';  // Change to 'eye-slash'
+            } else {
+                passwordField.type = 'password';
+                toggleButton.innerHTML = '<i class="fas fa-eye"></i>';  // Change to 'eye'
+            }
+        });
+    </script>
+
+{% endblock content %}

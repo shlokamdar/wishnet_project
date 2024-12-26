@@ -1,0 +1,201 @@
+{% extends 'dashboard_base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Left Panel: Assigned Member's Wishlist -->
+        <div class="col-12 col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Assigned Member's Wishlist</h5>
+                </div>
+                <div class="card-body">
+                    {% if assigned_member %}
+                        <h6>Assigned Member: {{ assigned_member.username }}</h6>
+                        {% if assigned_member_wishlists %}
+                            <ul>
+                                {% for wishlist in assigned_member_wishlists %}
+                                    <li>
+                                        <strong>{{ wishlist.title }}</strong>
+                                        <ul>
+                                            {% for item in wishlist.items.all %}
+                                                <li>{{ item.name }} - <span class="badge bg-info">{{ item.price_range }}</span></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p>{{ assigned_member.username }} has no wishlists within the budget.</p>
+                        {% endif %}
+                    {% else %}
+                        <p>No assigned member found for Secret Santa.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <ul>
+                {% for wishlist in group.wishlists.all %}
+                    {% if wishlist.user == user %}
+                        <br>
+                        <h6>My Wishlist</h6>
+                        <li>
+                            <strong>{{ wishlist.title }}</strong>
+                            <ul>
+                                {% for item in wishlist.items.all %}
+                                    <li>{{ item.name }} - <span class="badge bg-info">{{ item.price_range }}</span></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endif %}
+                {% empty %}
+                    <p>No wishlist added to this group yet.</p>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Right Panel: Group Details (Admin section) -->
+        <div class="col-12 col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Group Details</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Group Name:</strong> {{ group.name }}</p>
+                    <p><strong>Admin:</strong> {{ group.admin.username }}</p>
+                    <p><strong>Join Code:</strong> {{ group.join_code }}</p>
+                    <p><strong>Budget Limit:</strong> ₹{{ group.budget_limit }}</p>
+                    <p><strong>Group Members Limit:</strong> {{ group.group_members_limit }}</p>
+                    <p><strong>Created At:</strong> {{ group.created_at }}</p>
+                    {% if group.members.all %}
+                        <p><strong>Admin:</strong> {{ group.admin.username }}</p>
+                    {% else %}
+                        <p>No members in this group yet.</p>
+                    {% endif %}
+
+                    {% if user == group.admin %}
+                        <!-- Admin Actions -->
+                        <hr>
+                        <h6>Admin Actions</h6>
+                        <form method="POST" action="{% url 'groups:remove_member' group.id %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="member" class="form-label">Remove Member</label>
+                                <select class="form-select" id="member" name="member_id">
+                                    {% for member in group.members.all %}
+                                        <option value="{{ member.id }}">{{ member.username }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-danger">Remove Member</button>
+                        </form>
+                        <hr>
+                        
+                        <form method="POST" action="{% url 'groups:assign_secret_santa' group.id %}" id="assign-secret-santa-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary" id="assign-button">Assign Secret Santa</button>
+                        </form>
+                        <!-- Display messages with warning class -->
+                        {% if messages %}
+                            <div class="alert-container">
+                                {% for message in messages %}
+                                    <div class="alert alert-warning">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if user in group.members.all %}
+                        <!-- Member Actions: Add Wishlist -->
+                        <hr>
+                        <h6>Add Your Wishlist to the Group</h6>
+                        <form method="POST" action="{% url 'groups:add_wishlist_to_group' group.id %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="wishlist" class="form-label">Select Wishlist</label>
+                                <select class="form-select" id="wishlist" name="wishlist">
+                                    {% for wishlist in user.wishlists.all %}
+                                        <option value="{{ wishlist.id }}">{{ wishlist.title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-success">Add Wishlist to Group</button>
+                        </form>
+                        {% if messages %}
+                            <div class="alert-container">
+                                {% for message in messages %}
+                                    <div class="alert alert-warning">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    
+                        <div class="d-flex justify-content-start mt-3">
+                            <a href="{% url 'wishlists:create_wishlist' %}" class="btn btn-success rounded-pill me-2">
+                                Create New Wishlist
+                            </a>
+                            <a href="{% url "accounts:dashboard" %}" class="btn btn-secondary rounded-pill">
+                                Cancel
+                            </a>
+                        </div>
+                        <hr>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript to trigger confetti after form submission -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+<script>
+    // Make sure this is defined before calling it
+    function triggerConfetti() {
+        confetti({
+            particleCount: 150,         // Increase the number of particles for a bigger effect
+            spread: 70,                 // Keep the spread wide for a larger display
+            origin: { y: 0.6 },         // Start the confetti slightly lower
+            decay: 0.95,                // Slower fade (particles last longer)
+            duration: 8000,             // Keep confetti visible for 8 seconds (longer duration)
+            gravity: 0.25,              // Lower gravity to slow down the fall
+            scalar: 1.2,                // Keep the size of particles slightly larger
+            startVelocity: 25,          // Slow down the velocity for more controlled fall
+            drift: 0,                   // Keep the confetti moving straight down
+            stagger: 0.05,              // Slight delay for each confetti particle for more randomness
+            zIndex: 9999                // Ensure confetti is on top of other elements
+        });
+    }
+
+    document.getElementById("assign-secret-santa-form").onsubmit = function(event) {
+        event.preventDefault();  // Prevent default submission
+        // Ensure only the admin triggers the event
+        var adminAssigned = {% if user == group.admin %}true{% else %}false{% endif %};
+        if (adminAssigned) {
+            triggerConfetti();  // Trigger confetti
+            var formData = new FormData(this);
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            }).then(response => {
+                if (response.ok) {
+                    console.log('Form submitted successfully');
+                } else {
+                    console.log('Form submission failed');
+                }
+            }).catch(error => {
+                console.log('Error:', error);
+            });
+        } else {
+            alert("Only the admin can assign Secret Santa!");
+        }
+    };
+</script>
+
+{% endblock %}
