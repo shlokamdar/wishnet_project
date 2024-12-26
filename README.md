@@ -35,10 +35,6 @@ WishNet is a user-friendly platform designed to simplify the art of gifting and 
 - Smooth animations and confetti effects on Secret Santa assignments.
 
 ---
-## Screenshots
-![Dashboard](path-to-screenshot1.png)
-![Secret Santa Group](path-to-screenshot2.png)
----
 
 ## Live Demo
 Check out the live demo here: [Live Demo](http://your-demo-link.com)
