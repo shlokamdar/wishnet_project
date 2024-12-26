@@ -37,7 +37,7 @@ WishNet is a user-friendly platform designed to simplify the art of gifting and 
 ---
 
 ## Live Demo
-Check out the live demo here: [Live Demo](http://your-demo-link.com)
+Check out the live demo here: [Live Demo](https://wishnet.pythonanywhere.com/)
 
 ## Tech Stack
 - **Backend:** Django
