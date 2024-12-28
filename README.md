@@ -7,6 +7,14 @@
 WishNet is a user-friendly platform designed to take the guesswork out of gifting and wishlist management. Whether it’s for birthdays, holidays, or any special occasion, WishNet helps users create and share wishlists, stay on budget, and organize Secret Santa groups—all with a fun and festive flair. Built with Django, WishNet ensures thoughtful gifting without the stress.
 
 ---
+## **Live Demo**  
+Experience the platform firsthand by checking out the live demo here:  
+[**Live Demo**](https://wishnet.pythonanywhere.com/)
+
+---
+
+## Video Demo (PPT Presentation)
+Watch the PPT video demo explaining the project here: [Video Demo Link](https://www.youtube.com/watch?v=GBU5Rf4h0cg)
 
 ## **Features**
 
@@ -38,17 +46,6 @@ WishNet is a user-friendly platform designed to take the guesswork out of giftin
 - Fully responsive design with a dynamic navbar that adjusts based on screen size.  
 - Smooth animations and confetti effects when Secret Santa assignments are made.
 
----
-
-## **Live Demo**  
-Experience the platform firsthand by checking out the live demo here:  
-[**Live Demo**](https://wishnet.pythonanywhere.com/)
-
----
-
-## **PPT Explanation Link**  
-To get a detailed walkthrough and explanation of the project, check out the PowerPoint presentation:  
-[**PPT Explanation**](#) *(Link to be added)*
 
 ---
 
