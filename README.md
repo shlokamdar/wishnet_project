@@ -14,7 +14,7 @@ Experience the platform firsthand by checking out the live demo here:
 ---
 
 ## Video Demo (PPT Presentation)
-Watch the PPT video demo explaining the project here: [Video Demo Link](https://www.youtube.com/watch?v=GBU5Rf4h0cg)
+Watch the PPT video demo explaining the project here: [Video Demo Link](https://youtu.be/2Fomm__E2NA?si=RSYffCXVRAZxdXM8)
 
 ## **Features**
 
